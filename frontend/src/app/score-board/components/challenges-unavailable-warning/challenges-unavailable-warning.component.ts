@@ -6,6 +6,10 @@ import { TranslateModule } from '@ngx-translate/core'
 import { MatButtonModule } from '@angular/material/button'
 import { WarningCardComponent } from '../warning-card/warning-card.component'
 import { NgClass } from '@angular/common'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faRobot } from '@fortawesome/free-solid-svg-icons'
+
+library.add(faRobot)
 
 @Component({
   changeDetection: ChangeDetectionStrategy.Eager,
@@ -19,7 +23,11 @@ export class ChallengesUnavailableWarningComponent {
   readonly filterSetting = model.required<FilterSetting>()
 
   private readonly disabledChallenges = computed(() =>
-    this.challenges().filter(challenge => challenge.disabledEnv !== null)
+    this.challenges().filter(challenge => challenge.disabledEnv !== null && challenge.disabledEnv !== 'LLM API')
+  )
+
+  private readonly disabledWithoutLlmChallenges = computed(() =>
+    this.challenges().filter(challenge => challenge.disabledEnv === 'LLM API')
   )
 
   private readonly disabledOnWindowsChallenges = computed(() =>
@@ -34,6 +42,7 @@ export class ChallengesUnavailableWarningComponent {
 
   readonly disabledOnWindows = computed(() => this.disabledOnWindowsChallenges().length > 0)
   readonly numberOfDisabledChallengesOnWindows = computed(() => this.disabledOnWindowsChallenges().length)
+  readonly numberOfDisabledChallengesWithoutLlm = computed(() => this.disabledWithoutLlmChallenges().length)
 
   toggleShowDisabledChallenges () {
     this.filterSetting.update(current => ({

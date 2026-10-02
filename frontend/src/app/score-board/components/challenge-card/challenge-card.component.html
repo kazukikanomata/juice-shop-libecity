@@ -23,13 +23,18 @@
   </div>
   <div class="badge-group">
     <!-- info text if the challenge is unavailable -->
-    @if (challenge().disabledEnv !== null && challenge().disabledEnv !== 'safetyMode') {
+    @if (challenge().disabledEnv !== null && challenge().disabledEnv !== 'safetyMode' && challenge().disabledEnv !== 'LLM API') {
     <button class="badge" [matTooltip]="'CHALLENGE_UNAVAILABLE' | translate:{ env: challenge().disabledEnv }">
       <mat-icon [style.color]="'var(--theme-warn)'">info_outline</mat-icon>
     </button>
     }
     @if (challenge().disabledEnv === 'safetyMode') {
     <button class="badge" [matTooltip]="'CHALLENGE_UNAVAILABLE_SAFETYMODE'| translate:{ env: challenge().disabledEnv}">
+      <mat-icon [style.color]="'var(--theme-warn)'">info_outline</mat-icon>
+    </button>
+    }
+    @if (challenge().disabledEnv === 'LLM API') {
+    <button class="badge" [matTooltip]="'CHALLENGE_UNAVAILABLE_LLM' | translate">
       <mat-icon [style.color]="'var(--theme-warn)'">info_outline</mat-icon>
     </button>
     }
