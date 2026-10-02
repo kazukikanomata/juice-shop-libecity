@@ -225,8 +225,8 @@
   ],
   "heroku-run-build-script": true,
   "allowScripts": {
-    "sqlite3@5.1.7": true,
-    "esbuild@0.28.1": true,
+    "sqlite3": true,
+    "esbuild": true,
     "@scarf/scarf": false,
     "cypress@15.17.0": true
   }
