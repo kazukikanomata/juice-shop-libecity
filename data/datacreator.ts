@@ -113,6 +113,8 @@ async function createChallenges () {
         challengeDependencies.push({ ...dependency, key: domain, missing: !preconditionResults[domain] })
       }
     }
+    const missingLlmDependency = challengeDependencies.some(dependency => dependency.missing && dependency.dependency.startsWith('LLM'))
+    const disabledEnv = disabledBecause ?? (missingLlmDependency ? 'LLM API' : null)
 
     challengeRecords.push({
       key: challenge.key,
@@ -120,11 +122,15 @@ async function createChallenges () {
       category: challenge.category,
       tags: (tags != null) ? tags.join(',') : undefined,
       // todo(@J12934) currently missing the 'not available' text. Needs changes to the model and utils functions
-      description: isChallengeEnabled ? description : (description + ' <em>(This challenge is <strong>potentially harmful</strong> on ' + disabledBecause + '!)</em>'),
+      description: !isChallengeEnabled
+        ? (description + ' <em>(This challenge is <strong>potentially harmful</strong> on ' + disabledBecause + '!)</em>')
+        : missingLlmDependency
+          ? (description + ' <em>(This challenge is <strong>unavailable</strong> without access to an LLM API!)</em>')
+          : description,
       difficulty: challenge.difficulty,
       solved: false,
       mitigationUrl: showMitigations ? challenge.mitigationUrl : null,
-      disabledEnv: disabledBecause,
+      disabledEnv,
       tutorialOrder: (challenge.tutorial != null) ? challenge.tutorial.order : null,
       codingChallengeStatus: 0,
       hasCodingChallenge

@@ -21,3 +21,18 @@
     </button>
   </warning-card>
 }
+@if (numberOfDisabledChallengesWithoutLlm() > 0) {
+  <warning-card>
+    <ng-container warning-icon>
+      <i class="env-icon fas fa-robot"></i>
+    </ng-container>
+    <span warning-text [innerHTML]="'INFO_DISABLED_CHALLENGES_LLM' | translate: {num: numberOfDisabledChallengesWithoutLlm()}"></span>
+    <button warning-action mat-button color="tertiary" (click)="toggleShowDisabledChallenges()">
+      @if (filterSetting().showDisabledChallenges === true) {
+        {{ 'HIDE_DISABLED_CHALLENGES' | translate }}
+      } @else {
+        {{ 'SHOW_DISABLED_CHALLENGES' | translate }}
+      }
+    </button>
+  </warning-card>
+}

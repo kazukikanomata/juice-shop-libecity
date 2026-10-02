@@ -35,6 +35,8 @@
     <span>
       @if (challenge.disabledEnv === 'Windows') {
         <i class="{{ 'fab fa-' + challenge.disabledEnv?.toString().toLowerCase() }}"></i>
+      } @else if (challenge.disabledEnv === 'LLM API') {
+        <i class="fas fa-robot"></i>
       } @else {
         <i class="{{ 'icon-' + challenge.disabledEnv?.toString().toLowerCase() }}"></i>
       }

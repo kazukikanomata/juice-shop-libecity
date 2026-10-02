@@ -8,6 +8,7 @@ import { WindowRefService } from '../Services/window-ref.service'
 import { ChallengeService } from '../Services/challenge.service'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faWindows } from '@fortawesome/free-brands-svg-icons'
+import { faRobot } from '@fortawesome/free-solid-svg-icons'
 
 import { Challenge } from '../Models/challenge.model'
 import { TranslateModule } from '@ngx-translate/core'
@@ -16,7 +17,7 @@ import { MatIconModule } from '@angular/material/icon'
 import { MatTooltip } from '@angular/material/tooltip'
 import { MatButtonModule } from '@angular/material/button'
 
-library.add(faWindows)
+library.add(faWindows, faRobot)
 
 @Component({
   changeDetection: ChangeDetectionStrategy.Eager,

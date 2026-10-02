@@ -94,6 +94,33 @@ describe('ChallengesUnavailableWarningComponent', () => {
         expect(component.numberOfDisabledChallengesOnWindows()).toBe(1)
     })
 
+    it('should count challenges disabled due to a missing LLM API separately from environment-disabled ones', () => {
+        fixture.componentRef.setInput('challenges', [
+            {
+                category: 'foobar',
+                name: 'my name',
+                mitigationUrl: 'https://owasp.example.com',
+                hasCodingChallenge: true,
+                description: 'lorem ipsum',
+                tagList: ['Easy'],
+                disabledEnv: 'LLM API'
+            },
+            {
+                category: 'foobar',
+                name: 'my name two',
+                mitigationUrl: 'https://owasp.example.com',
+                hasCodingChallenge: true,
+                description: 'lorem ipsum',
+                tagList: ['Easy'],
+                disabledEnv: 'Docker'
+            }
+        ])
+
+        expect(component.numberOfDisabledChallenges()).toBe(1)
+        expect(component.disabledBecauseOfEnv()).toBe('Docker')
+        expect(component.numberOfDisabledChallengesWithoutLlm()).toBe(1)
+    })
+
     it('should toggle via filter if disabled challenges are shown', () => {
         expect(component.filterSetting().showDisabledChallenges).toBe(true)
 
