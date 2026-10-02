@@ -37,7 +37,7 @@ For a detailed introduction, full list of features and architecture overview ple
 
 ## Table of contents
 
-- [Deployment](#deployment)
+- [デプロイ先](#デプロイ先)
 - [Demo](#demo)
 - [Documentation](#documentation)
     - [Node.js version compatibility](#nodejs-version-compatibility)
@@ -50,9 +50,9 @@ For a detailed introduction, full list of features and architecture overview ple
 - [Contributors](#contributors)
 - [Licensing](#licensing)
 
-## Deployment
+## デプロイ先
 
-This fork is deployed on Render:
+このフォークは Render にデプロイしています:
 <https://juice-shop-libe-off.onrender.com>
 
 ## Demo
