@@ -233,8 +233,12 @@ export const isOllamaUrl = (url: string): boolean => {
 export const checkIfLlmModelAvailable = async (llmApiUrl: string) => {
   const model = config.get<string>('application.chatBot.model')
   try {
-    const response = await fetch(`${llmApiUrl}/models`, { signal: AbortSignal.timeout(5000) })
-    if (!response.ok) return false
+    const headers: Record<string, string> = process.env.LLM_API_KEY ? { Authorization: `Bearer ${process.env.LLM_API_KEY}` } : {}
+    const response = await fetch(`${llmApiUrl}/models`, { headers, signal: AbortSignal.timeout(5000) })
+    if (!response.ok) {
+      logger.warn(`Could not verify LLM model ${colors.bold(model)} availability: LLM API returned status ${response.status} (${colors.yellow('WARNING')})`)
+      return false
+    }
     const body = await response.json() as { data?: Array<{ id: string }> }
     const availableModels: string[] = (body.data ?? []).map((m: { id: string }) => m.id)
     const modelFound = availableModels.some(

@@ -164,6 +164,38 @@ void describe('preconditionValidation', () => {
       await checkIfLlmModelAvailable('http://localhost:11434/v1')
       assert.equal(fetchStub.mock.calls.length, 1)
     })
+
+    void it('should send LLM_API_KEY as bearer token when it is set', async () => {
+      const originalKey = process.env.LLM_API_KEY
+      process.env.LLM_API_KEY = 'test-key'
+      try {
+        fetchStub.mock.mockImplementation(async () => ({ ok: true, json: async () => ({ data: [] }) }))
+        await checkIfLlmModelAvailable('https://api.openai.com/v1')
+        assert.equal(fetchStub.mock.calls[0].arguments[0], 'https://api.openai.com/v1/models')
+        assert.deepEqual(fetchStub.mock.calls[0].arguments[1].headers, { Authorization: 'Bearer test-key' })
+      } finally {
+        if (originalKey === undefined) delete process.env.LLM_API_KEY
+        else process.env.LLM_API_KEY = originalKey
+      }
+    })
+
+    void it('should not send an authorization header when LLM_API_KEY is not set', async () => {
+      const originalKey = process.env.LLM_API_KEY
+      delete process.env.LLM_API_KEY
+      try {
+        fetchStub.mock.mockImplementation(async () => ({ ok: true, json: async () => ({ data: [] }) }))
+        await checkIfLlmModelAvailable('http://localhost:11434/v1')
+        assert.deepEqual(fetchStub.mock.calls[0].arguments[1].headers, {})
+      } finally {
+        if (originalKey !== undefined) process.env.LLM_API_KEY = originalKey
+      }
+    })
+
+    void it('should return false when the LLM API rejects the request as unauthorized', async () => {
+      fetchStub.mock.mockImplementation(async () => ({ ok: false, status: 401 }))
+      const available = await checkIfLlmModelAvailable('https://api.openai.com/v1')
+      assert.equal(available, false)
+    })
   })
 
   void describe('checkIfDomainReachable', () => {
